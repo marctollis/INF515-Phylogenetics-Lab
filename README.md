@@ -15,7 +15,7 @@ cd "$PROJ_DIR"
 wget https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/v2/linux-amd64/datasets
 chmod +x datasets
 
-wget https://raw.githubusercontent.com/marctollis/INF515-Comparative-Genomics/refs/heads/main/filter_fasta.py
+wget https://raw.githubusercontent.com/marctollis/INF515-Phylogenetics-Lab/main/filter_fasta.py
 
 wget https://github.com/iqtree/iqtree2/releases/download/v2.4.0/iqtree-2.4.0-Linux-intel.tar.gz
 tar -xzvf iqtree-2.4.0-Linux-intel.tar.gz
