@@ -7,20 +7,21 @@
 
 set -euo pipefail
 
-# Submit this script from the project root.
+# Submit from the project root.
 PROJ_DIR="$SLURM_SUBMIT_DIR"
 genes=(foxp2 egfr rag1 rbp3 ghr vwf apob)
 gene="${genes[$SLURM_ARRAY_TASK_ID]}"
 
 module load mafft
-# Load the course Python and Java modules if required.
+# Load course Python and Java modules here if required.
 
-mkdir -p "$PROJ_DIR/$gene"
-cd "$PROJ_DIR/$gene"
+# Create and enter this gene's analysis folder.
+mkdir -p "$PROJ_DIR/genes/$gene"
+cd "$PROJ_DIR/genes/$gene"
 
-echo "Analyzing $gene"
+echo "Analyzing $gene in $PWD"
 
-../datasets download gene symbol "$gene" \
+"$PROJ_DIR/datasets" download gene symbol "$gene" \
     --ortholog primates,9615 \
     --include cds
 
@@ -28,7 +29,7 @@ unzip ncbi_dataset.zip
 cp ncbi_dataset/data/cds.fna \
     "${gene}_mammals_ncbi_datasets.fna"
 
-python ../filter_fasta.py \
+python "$PROJ_DIR/filter_fasta.py" \
     "${gene}_mammals_ncbi_datasets.fna" \
     "${gene}_mammals_filtered.fna"
 
@@ -44,7 +45,7 @@ srun mafft "${gene}_mammals_filtered.fna" \
     > "${gene}_mammals_aligned.fna" \
     2> "${gene}_mafft.log"
 
-srun ../iqtree-2.4.0-Linux-intel/bin/iqtree2 \
+srun "$PROJ_DIR/iqtree-2.4.0-Linux-intel/bin/iqtree2" \
     -s "${gene}_mammals_aligned.fna" \
     -o Canis_lupus_familiaris \
     -B 1000 \
