@@ -4,7 +4,7 @@ Infer gene trees for eight protein-coding loci, combine them into an ASTRAL spec
 
 ## 1. Set up the project
 
-Run these commands on the course Linux cluster. Use the course-provided interactive Slurm allocation for the manual analysis. Python, MAFFT, Java, `wget`, and `unzip` must be available.
+Run these commands on the [NAU Monsoon cluster](https://in.nau.edu/arc/overview/). Use `srun` for the manual analysis, and the provided SLURM job array scripts. Python, MAFFT, Java, `wget`, and `unzip` must be available.
 
 ```bash
 export PROJ_DIR="/scratch/$USER/CompGenomicsCourse/fall26/phylogenetics"
