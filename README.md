@@ -1,7 +1,7 @@
 # INF515 Comparative Genomics: Phylogenetics Lab
 
 Marc Tollis, Ph.D.
-[marc.tollis@nau.edu](mailto: marc.tollis@nau.edu)
+<marc.tollis@nau.edu>
 
 Infer gene trees for eight protein-coding loci, combine them into an ASTRAL species tree, and compare relationships and branch support. Sample primates and use dog (*Canis lupus familiaris*) as the outgroup.
 
