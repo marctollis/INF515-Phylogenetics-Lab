@@ -72,11 +72,15 @@ cd genes/brca1
 "$PROJ_DIR/datasets" download gene symbol brca1 \
     --ortholog primates,9615 \
     --include cds
-
+```
+Now unzip the downloaded package:
+```bash
 unzip ncbi_dataset.zip
 cp ncbi_dataset/data/cds.fna brca1_mammals_ncbi_datasets.fna
+```
 
-# Inspect headers and count sequences.
+Inspect headers and count sequences:
+```bash
 grep '^>' brca1_mammals_ncbi_datasets.fna | head
 grep -c '^>' brca1_mammals_ncbi_datasets.fna
 ```
@@ -91,7 +95,9 @@ Use the course script to retain one representative transcript per species.
 python "$PROJ_DIR/filter_fasta.py" \
     brca1_mammals_ncbi_datasets.fna \
     brca1_mammals_filtered.fna
-
+```
+Inspect the filtered data and the new sequence headers:
+```bash
 grep '^>' brca1_mammals_filtered.fna
 grep -c '^>' brca1_mammals_filtered.fna
 ```
@@ -99,19 +105,21 @@ grep -c '^>' brca1_mammals_filtered.fna
 Confirm that the filtered headers include `Canis_lupus_familiaris`. These species labels will also be used in the species-tree analysis. Stop and investigate if filtering fails or the dog outgroup is missing.
 
 ### Align sequences
-
+Use MAFFT which was loaded as a module during set-up.
 ```bash
 srun mafft brca1_mammals_filtered.fna \
     > brca1_mammals_aligned.fna \
     2> brca1_mafft.log
-
+```
+Inspect the alignment for extensive gaps or incomplete sequences.
+```bash
 less brca1_mammals_aligned.fna
 ```
 
-Inspect the alignment for extensive gaps or incomplete sequences. Press `q` to exit `less`.
+Press `q` to exit `less`.
 
 ### Infer the gene tree
-
+Use IQTREE:
 ```bash
 srun -c 2 "$PROJ_DIR/iqtree-2.4.0-Linux-intel/bin/iqtree2" \
     -s brca1_mammals_aligned.fna \
@@ -119,10 +127,19 @@ srun -c 2 "$PROJ_DIR/iqtree-2.4.0-Linux-intel/bin/iqtree2" \
     -B 1000 \
     -T 2 \
     --prefix brca1
-
+```
+View the IQTREE output file:
+```bash
 less brca1.iqtree
-cat brca1.treefile
+```
 
+View the treefile:
+```bash
+cat brca1.treefile
+```
+
+Return to project directory:
+```bash
 cd "$PROJ_DIR"
 ```
 
@@ -139,7 +156,7 @@ Find the selected model in `brca1.iqtree`. The inferred gene tree is stored in `
 
 The script downloaded in Section 1, `analyze_remaining_genes.sbatch`, analyzes **FOXP2, EGFR, RAG1, RBP3, GHR, VWF, and APOB** using the same workflow as BRCA1.
 
-The script stores the gene names in a Bash array. Slurm creates seven tasks, and each task selects one gene, creates its folder under `genes/`, downloads and filters its sequences, runs MAFFT, and infers its IQ-TREE tree.
+The script stores the gene names in a Bash array. Slurm creates seven tasks (jobs), and each task selects one gene, creates its folder under `genes/`, downloads and filters its sequences, runs MAFFT, and infers its IQ-TREE tree.
 
 | Task index | Gene |
 |---|---|
@@ -210,7 +227,7 @@ If a task fails, inspect the error and consult your instructor before resubmitti
 
 Combine one best gene tree per locus. Use `.treefile` outputs rather than bootstrap replicate trees.
 
-Run this block within the course-provided Slurm allocation. It stops if any required tree is missing or empty.
+Run this block. It stops if any required tree is missing or empty.
 
 ```bash
 cd "$PROJ_DIR"
